@@ -1,7 +1,5 @@
 ![image](https://github.com/mytechnotalent/pa/blob/main/Personal%20Assistant.png?raw=true)
 
-## FREE Reverse Engineering Self-Study Course [HERE](https://github.com/mytechnotalent/Reverse-Engineering-Tutorial)
-
 <br>
 
 # Personal Assistant
