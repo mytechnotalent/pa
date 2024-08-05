@@ -261,7 +261,6 @@ Settings.llm = llm
 
 
 ```python
-# Debug VectorStoreIndex
 print("VectorStoreIndex initialization")
 vector_index = VectorStoreIndex.from_documents(
     documents, 
