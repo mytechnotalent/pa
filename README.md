@@ -304,7 +304,7 @@ query_engine = index.as_query_engine()
 
 <br>
 
-# Feed in user query
+# User Query
 ```python
 def query_function(query):
     """
