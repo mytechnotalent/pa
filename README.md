@@ -7,85 +7,82 @@
 # Personal Assistant
 A Personal Assistant leveraging Retrieval-Augmented Generation (RAG) and the LLaMA-3.1-8B-Instant Large Language Model (LLM). This tool is designed to revolutionize PDF document analysis tasks by combining machine learning with retrieval-based systems.
 
-## Origin of the RAG Architecture
+<br>
 
+# Origin of the RAG Architecture
 Retrieval-Augmented Generation (RAG) is a powerful technique in natural language processing (NLP) that combines retrieval-based methods with generative models to produce more accurate and contextually relevant outputs. This approach was introduced in the 2020 paper "Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks" by Facebook AI Research (FAIR).
 
 For further reading and a deeper understanding of RAG, refer to the original paper by Facebook AI Research: [Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks](https://arxiv.org/pdf/2005.11401). 
 
-## Overview of the RAG Architecture
+<br>
 
+# Overview of the RAG Architecture
 The RAG model consists of three main components:
 1. **Indexer**: This component creates an index of the corpus to facilitate efficient retrieval of relevant documents.
 2. **Retriever**: This component retrieves relevant documents from the indexed corpus based on the input query.
 3. **Generator**: This component generates responses conditioned on the retrieved documents.
 
-## Mathematical Formulation
+<br>
 
-### Indexer
+# Mathematical Formulation
 
+## Indexer
 The indexer preprocesses the corpus $\mathcal{D}$ to create an index that maps queries to relevant documents. This index is used by the retriever for efficient document retrieval.
 
-### Retriever
-
+## Retriever
 The retriever selects the top $k$ documents from the indexed corpus $\mathcal{D}$ based on their relevance to the input query $q$. The relevance of a document $d_i$ to a query $q$ is denoted as $s(q, d_i)$.
 
-### Generator
-
+## Generator
 The generator produces a response $r$ based on the input query $q$ and the retrieved documents $\{d_1, d_2, \ldots, d_k\}$. The probability of generating a response $r$ given the query $q$ and a document $d_i$ is denoted as $P(r \mid q, d_i)$.
 
-### Combining Indexer, Retriever, and Generator
-
+## Combining Indexer, Retriever, and Generator
 The final probability of generating a response $r$ given the query $q$ is obtained by marginalizing over the top $k$ retrieved documents:
-
 $$
 P(r \mid q) = \sum_{i=1}^{k} P(d_i \mid q) P(r \mid q, d_i)
 $$
-
 Here, $P(d_i \mid q)$ is the normalized relevance score of document $d_i$ given the query $q$, and $P(r \mid q, d_i)$ is the probability of generating response $r$ given the query $q$ and document $d_i$.
 
-## Implementation Details
+<br>
 
-### Training
+# Implementation Details
 
+## Training
 The RAG model is trained in three stages:
 1. **Indexer Training**: The indexer is trained to create an efficient and accurate mapping of queries to documents.
 2. **Retriever Training**: The retriever is trained to maximize the relevance score $s(q, d_i)$ for relevant documents.
 3. **Generator Training**: The generator is trained to maximize the probability $P(r \mid q, d_i)$ for the ground-truth responses.
 
-### Inference
-
+## Inference
 During inference, the RAG model follows these steps:
 1. **Indexing**: The corpus is indexed to facilitate efficient retrieval.
 2. **Retrieval**: The top $k$ documents are retrieved for a given query based on their relevance scores.
 3. **Generation**: A response is generated conditioned on the input query and the retrieved documents. The final response is obtained by marginalizing over the retrieved documents as described above.
 
-## Conclusion
+<br>
 
+# Conclusion
 RAG leverages the strengths of indexing, retrieval-based, and generation-based models to produce more accurate and informative responses. By conditioning the generation on retrieved documents, RAG can incorporate external knowledge from large corpora, leading to better performance on various tasks.
 
 The combination of indexer, retriever, and generator in the RAG model makes it a powerful approach for tasks that require access to external knowledge and the ability to generate coherent and contextually appropriate responses.
 
-### Install Conda Environment
+<br>
+
+# Install Conda Environment
 1. To select a Conda environment in Visual Studio Code, press the play button in the next cell which will open up a command prompt then select `Python Environments...`
 2. A new command prompt will pop up and select `+ Create Python Environment`.
 3. A new command prompt will again pop up and select `Conda Creates a .conda Conda environment in the current workspace`.
 4. A new command prompt will again pop up and select `* Python 3.11`.
-
-
 ```python
 !conda create -n pa python=3.11 -y
 ```
 
-### !!! ACTION ITEM !!!
+## !!! ACTION ITEM !!!
 In order for the Conda environment to be available, you need to close down VSCode and reload it and select `rea` in the Kernel area in the top-right of VSCode.
 1. In the VSCode pop-up command window select `Select Another Kernel...`.
 2. In the next command window select `Python Environments...`.
 3. In the next command window select `pa (Python 3.11.9)`.
 
-### Install Packages
-
-
+## Install Packages
 ```python
 !conda install -n pa \
     pytorch \
@@ -104,9 +101,9 @@ In order for the Conda environment to be available, you need to close down VSCod
 %pip install -U gradio
 ```
 
-### Install Tesseract
+<br>
 
-
+## Install Tesseract
 ```python
 import os
 import platform
@@ -146,9 +143,9 @@ def install_tesseract():
 install_tesseract()
 ```
 
-### Convert PDF to OCR
+<br>
 
-
+# Convert PDF to OCR
 ```python
 import webbrowser
 
@@ -156,9 +153,9 @@ url = "https://www.ilovepdf.com/ocr-pdf"
 webbrowser.open_new(url)
 ```
 
-### Import Libraries
+<br>
 
-
+# Import Libraries
 ```python
 import os
 from llama_index.core import (
@@ -174,27 +171,26 @@ from llama_index.llms.groq import Groq
 import gradio as gr
 ```
 
-### !!! ACTION ITEM !!!
+<br>
+
+# !!! ACTION ITEM !!!
 Visit https://console.groq.com/keys and set up an API Key then replace `<GROQ_API_KEY>` below with the newly generated key.
-
-
 ```python
 os.environ["GROQ_API_KEY"] = "<GROQ_API_KEY>"
 GROQ_API_KEY = os.getenv("GROQ_API_KEY")
 ```
 
-### Disable Tokenizer Parallelism Globally
+<br>
 
-
+# Disable Tokenizer Parallelism Globally
 ```python
 os.environ["TOKENIZERS_PARALLELISM"] = "false"
 ```
 
-### Data Ingestion
+<br>
 
-
+# Data Ingestion
 ```python
-
 def load_single_pdf_from_directory(directory_path):
     """
     Load a single PDF file from the specified directory.
@@ -226,40 +222,39 @@ else:
 
     Successfully loaded 2 pages(s).
 
+<br>
 
-### Chunking
-
-
+# Chunking
 ```python
 text_splitter = SentenceSplitter(chunk_size=2048, chunk_overlap=200)
 nodes = text_splitter.get_nodes_from_documents(documents)
 ```
 
-### Embedding Model
+<br>
 
-
+# Embedding Model
 ```python
 embed_model = HuggingFaceEmbedding(model_name="sentence-transformers/all-MiniLM-L6-v2")
 ```
 
-### Define LLM Model
+<br>
 
-
+# Define LLM Model
 ```python
 llm = Groq(model="llama-3.1-8b-instant", api_key=GROQ_API_KEY)
 ```
 
-### Configure Service Context
+<br>
 
-
+# Configure Service Context
 ```python
 Settings.embed_model = embed_model
 Settings.llm = llm
 ```
 
-### Create Vector Store Index
+<br>
 
-
+# Create Vector Store Index
 ```python
 print("VectorStoreIndex initialization")
 vector_index = VectorStoreIndex.from_documents(
@@ -279,38 +274,37 @@ vector_index = VectorStoreIndex.from_documents(
 
     Generating embeddings:   0%|          | 0/10 [00:00<?, ?it/s]
 
+<br>
 
-#### Persist/Save Index
-
-
+# Persist/Save Index
 ```python
 vector_index.storage_context.persist(persist_dir="./storage_mini")
 ```
 
-#### Define Storage Context
+<br>
 
-
+# Define Storage Context
 ```python
 storage_context = StorageContext.from_defaults(persist_dir="./storage_mini")
 ```
 
-#### Load Index
+<br>
 
-
+# Load Index
 ```python
 index = load_index_from_storage(storage_context)
 ```
 
-### Define Query Engine
+<br>
 
-
+# Define Query Engine
 ```python
 query_engine = index.as_query_engine()
 ```
 
-#### Feed in user query
+<br>
 
-
+# Feed in user query
 ```python
 def query_function(query):
     """
@@ -345,10 +339,7 @@ iface.launch()
 
 ![image](https://github.com/mytechnotalent/pa/blob/main/example.png?raw=true)
 
-## Contributing
-Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
+<br>
 
-Please make sure to update tests as appropriate.
-
-## License
+# License
 [Apache License, Version 2.0](https://www.apache.org/licenses/LICENSE-2.0)
